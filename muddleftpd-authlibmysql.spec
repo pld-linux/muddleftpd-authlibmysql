@@ -3,7 +3,7 @@ Summary:	Library to MySQL authentication for muddleftpd
 Summary(pl):	Biblioteka autentykacji MySQL dla muddleftpd
 Name:		muddleftpd-authlibmysql
 Version:	0.1
-Release:	2
+Release:	3
 License:	GPL
 Group:		Daemons
 Source0:	http://www.arach.net.au/~wildfire/muddleftpd/modules/%{shortname}-%{version}.tar.gz
@@ -40,12 +40,10 @@ MySQL.
 rm -rf $RPM_BUILD_ROOT
 install -D libauthmysql.so $RPM_BUILD_ROOT%{_pkglibdir}/libauthmysql.so
 
-gzip -9nf AUTHORS CHANGES README
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz
+%doc AUTHORS CHANGES README
 %attr(750,root,root) %{_pkglibdir}/libauthmysql.so
