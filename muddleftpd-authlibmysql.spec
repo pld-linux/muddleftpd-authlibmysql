@@ -31,7 +31,7 @@ MySQL.
 %patch0 -p 1
 
 %build
-autoconf
+%{__autoconf}
 %configure \
 	--with-mysql=%{_prefix}
 %{__make} LIBS="-lmysqlclient"
