@@ -26,20 +26,19 @@ within MySQL.
 %patch0 -p 1
 
 %build
-%{__autoconf}
+autoconf
 %configure \
 	--with-mysql=%{_prefix}
 %{__make}
 
 %install
-%__rm -rf $RPM_BUILD_ROOT
-%{__install} -d $RPM_BUILD_ROOT/%{_pkglibdir}
-%{__install} libauthmysql.so $RPM_BUILD_ROOT/%{_pkglibdir}
+rm -rf $RPM_BUILD_ROOT
+install -D libauthmysql.so $RPM_BUILD_ROOT/%{_pkglibdir}/libauthmysql.so
 
-%__gzip -9nf AUTHORS CHANGES README
+gzip -9nf AUTHORS CHANGES README
 
 %clean
-%__rm -rf $RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
