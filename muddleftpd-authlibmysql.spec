@@ -10,6 +10,7 @@ Group(pl):	Serwery
 Source0:	http://www.arach.net.au/~wildfire/muddleftpd/modules/%{shortname}-%{version}.tar.gz
 Patch0:		%{shortname}-paths.patch
 URL:		http://www.muddleftpd.cx/
+BuildRequires:	autoconf
 BuildRequires:	mysql-static
 Requires:	muddleftpd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
