@@ -7,6 +7,7 @@ Release:	3.1
 License:	GPL
 Group:		Daemons
 Source0:	http://www.arach.net.au/~wildfire/muddleftpd/modules/%{shortname}-%{version}.tar.gz
+# Source0-md5:	7abbc5e21b08fbdddbb20fb9fd4ba837
 Patch0:		%{shortname}-paths.patch
 Patch1:		%{shortname}-vmailpwd.patch
 URL:		http://www.muddleftpd.cx/
