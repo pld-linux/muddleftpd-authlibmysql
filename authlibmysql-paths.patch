@@ -1,0 +1,23 @@
+diff -urN authlibmysql-0.1.orig/configure.in authlibmysql-0.1/configure.in
+--- authlibmysql-0.1.orig/configure.in	Tue Jun 20 15:14:44 2000
++++ authlibmysql-0.1/configure.in	Wed Jul 11 17:51:23 2001
+@@ -8,8 +8,8 @@
+ dnl Checks for libraries.
+ AC_ARG_WITH(mysql,
+ [ --with-mysql		specify the top level of the mysql installation
+-			tree.  [/usr/local/mysql]], mysqltop=$withval,
+-	   mysqltop=/usr/local/mysql
++			tree.  [/usr]], mysqltop=$withval,
++	   mysqltop=/usr
+ ) 
+ 
+ AC_MSG_CHECKING([for mysql in directory $mysqltop])
+@@ -17,7 +17,7 @@
+ if test -d $mysqltop
+ then
+ 	AC_MSG_RESULT([yes])
+-	CFLAGS="$CFLAGS -I$mysqltop/include"
++	CFLAGS="$CFLAGS -I$mysqltop/include/mysql"
+ 	LIBS="$LIBS $mysqltop/lib/libmysqlclient.a"
+ else
+ 	AC_MSG_RESULT([no])
