@@ -29,7 +29,7 @@ within MySQL.
 autoconf
 %configure \
 	--with-mysql=%{_prefix}
-%{__make}
+%{__make} LIBS="-lmysqlclient"
 
 %install
 rm -rf $RPM_BUILD_ROOT
