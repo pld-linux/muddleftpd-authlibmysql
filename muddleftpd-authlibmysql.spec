@@ -6,8 +6,6 @@ Version:	0.1
 Release:	2
 License:	GPL
 Group:		Daemons
-Group(de):	Server
-Group(pl):	Serwery
 Source0:	http://www.arach.net.au/~wildfire/muddleftpd/modules/%{shortname}-%{version}.tar.gz
 Patch0:		%{shortname}-paths.patch
 URL:		http://www.muddleftpd.cx/
