@@ -1,8 +1,9 @@
 %define         shortname       authlibmysql
 Summary:	Library to MySQL authentication for muddleftpd
+Summary(pl):	Biblioteka autentykacji MySQL dla muddleftpd
 Name:		muddleftpd-authlibmysql
 Version:	0.1
-Release:	1
+Release:	2
 License:	GPL
 Group:		Daemons
 Group(de):	Server
@@ -22,6 +23,11 @@ This module allows muddleftpd authenticate using a MySQL server. This
 module will read client information from a supplied table/database
 within MySQL.
 
+%description -l pl
+Ten modu³ pozwala muddleftpd autentykowaæ u¿ytkowników przy u¿yciu
+serwera MySQL. Modu³ czyta informacje o kliencie z podanej tabeli/bazy
+MySQL.
+
 %prep
 %setup -q -n %{shortname}-%{version}
 %patch0 -p 1
@@ -34,7 +40,7 @@ autoconf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -D libauthmysql.so $RPM_BUILD_ROOT/%{_pkglibdir}/libauthmysql.so
+install -D libauthmysql.so $RPM_BUILD_ROOT%{_pkglibdir}/libauthmysql.so
 
 gzip -9nf AUTHORS CHANGES README
 
