@@ -1,0 +1,105 @@
+diff -urP authlibmysql-0.1.orig/README authlibmysql-0.1/README
+--- authlibmysql-0.1.orig/README	Mon Jun 26 17:22:56 2000
++++ authlibmysql-0.1/README	Thu Dec 19 19:10:16 2002
+@@ -109,6 +109,12 @@
+ 		Use MySQL's builtin function password() to test passwords.
+ 		This is portable, and is easy to use within MySQL scripts.
+ 
++	d) 'vmail' (EXPERIMENTAL)
++	        Use vmail-sql (http://www.ex-parrot.com/~chris/vmail-sql/)
++		password storing format (like {hash_type}hash) - currently
++		only plaintext and crypt_md5 are supported. Also note, that
++		You must create Your own mysql_query.
++
+ 	The default option for mysql_encryption is 'mysql'
+ 
+ mysql_query <querystring>
+@@ -159,4 +165,4 @@
+ 
+ AUTHORS:
+ 
+-Beau Kuiper (support@muddleftpd.cx)
+\ No newline at end of file
++Beau Kuiper (support@muddleftpd.cx)
+diff -urP authlibmysql-0.1.orig/README.vmail-sql authlibmysql-0.1/README.vmail-sql
+--- authlibmysql-0.1.orig/README.vmail-sql	Thu Jan  1 01:00:00 1970
++++ authlibmysql-0.1/README.vmail-sql	Thu Dec 19 19:20:23 2002
+@@ -0,0 +1,29 @@
++This file describes sample mysql_query to use muddleftpd with vmail-sql
++database:
++
++mysql_encryption vmail
++mysql_query SELECT password_hash,concat('/var/www/virtual/', 
++    SUBSTRING_INDEX('%U','@','-1'), '/', SUBSTRING_INDEX('%U','@','1')),
++    concat('/var/www/virtual/', SUBSTRING_INDEX('%U','@','-1'), '/', 
++    SUBSTRING_INDEX('%U','@','1')),concat('51'),concat('51') FROM `popbox` 
++    WHERE domain_name=SUBSTRING_INDEX('%U','@','-1') AND 
++    local_part=SUBSTRING_INDEX('%U','@','1')
++
++(PLEASE NOTE: This query must be specifed in single line!)
++
++Result:
++	- login is user@virtual.domain.com;
++	- password can be crypt_md5 or plaintext;
++	- home directory is set to /var/www/virtual/NAME.OF.DOMAIN/username/
++	- ftp daemon runs with web server user privileges 
++	  (my apache uid/gid is 51);
++
++This is very pretty way to make easy virtual hosting without ip-based
++virtual hosts in ftpd (normal unix users logs in using normal unix accounts).
++
++Patch for this was tested only on my machine, and i don't give any warranty
++that will works on every machine.
++
++Lucas J. Mozer
++baseciq@baseciq.org
++http://www.baseciq.org
+diff -urP authlibmysql-0.1.orig/authmysql.c authlibmysql-0.1/authmysql.c
+--- authlibmysql-0.1.orig/authmysql.c	Mon Jun 26 17:35:58 2000
++++ authlibmysql-0.1/authmysql.c	Thu Dec 19 15:06:57 2002
+@@ -27,6 +27,17 @@
+ #define ENCRYPTED_MYSQL 1
+ #define ENCRYPTED_CRYPT 2
+ 
++/* Fixed support for passwords from vmail-sql package from
++ * http://www.ex-parrot.com/~chris/vmail-sql/ where password is stored 
++ * in format "{hash_type}password", for example:
++ *
++ * {crypt_md5}$1$ez4I2RP.$eLbSsgYBcGDR/whQqcwje0
++ * {plaintext}foo.bar
++ *
++ * -- baseciq@baseciq.org, Dec 19, 2002
++ */
++
++#define ENCRYPTED_VMAIL 3
+ typedef struct 
+ {
+ 	char *password;
+@@ -90,6 +101,8 @@
+ 		newhandle->encrypted = ENCRYPTED_NONE;
+ 	else if (strcasecmp(sqlencryption, "crypt") == 0)
+ 		newhandle->encrypted = ENCRYPTED_CRYPT;
++	else if (strcasecmp(sqlencryption, "vmail") == 0)
++		newhandle->encrypted = ENCRYPTED_VMAIL;
+ 	else
+ 	{
+ 		log_addentry(MYLOG_INFO, NULL, "libauthmysql REQUIRES mysql_encryption to be set to either plaintext, mysql, crypt");
+@@ -235,6 +248,18 @@
+ 		case ENCRYPTED_MYSQL:
+ 			make_scrambled_password(pass2, password);
+ 			return(strcmp(h->password, pass2) == 0);
++		case ENCRYPTED_VMAIL:
++			// test that string taken from database have at least
++			// 11 characters
++			if(strlen(h->password)>11)
++				// test for {plaintext} prefix
++				if(strncmp(h->password, "{plaintext}",11) == 0)
++					// plain text compare
++					return(strcmp(password, h->password+11) == 0);
++				// test for {crypt_md5} prefix
++				else if(strncmp(h->password, "{crypt_md5}",11) == 0)
++					// normal crypt compare
++					return chkpassword(h->password+11, password);
+ 		default:
+ 			return(FALSE);
+ 	}
