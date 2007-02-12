@@ -1,6 +1,6 @@
 %define         shortname       authlibmysql
 Summary:	Library to MySQL authentication for muddleftpd
-Summary(pl):	Biblioteka autentykacji MySQL dla muddleftpd
+Summary(pl.UTF-8):   Biblioteka autentykacji MySQL dla muddleftpd
 Name:		muddleftpd-authlibmysql
 Version:	0.1
 Release:	3.1
@@ -23,9 +23,9 @@ This module allows muddleftpd authenticate using a MySQL server. This
 module will read client information from a supplied table/database
 within MySQL.
 
-%description -l pl
-Ten modu≥ pozwala muddleftpd autentykowaÊ uøytkownikÛw przy uøyciu
-serwera MySQL. Modu≥ czyta informacje o kliencie z podanej tabeli/bazy
+%description -l pl.UTF-8
+Ten modu≈Ç pozwala muddleftpd autentykowaƒá u≈ºytkownik√≥w przy u≈ºyciu
+serwera MySQL. Modu≈Ç czyta informacje o kliencie z podanej tabeli/bazy
 MySQL.
 
 %prep
