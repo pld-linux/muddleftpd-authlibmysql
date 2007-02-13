@@ -1,6 +1,6 @@
 %define         shortname       authlibmysql
 Summary:	Library to MySQL authentication for muddleftpd
-Summary(pl.UTF-8):   Biblioteka autentykacji MySQL dla muddleftpd
+Summary(pl.UTF-8):	Biblioteka autentykacji MySQL dla muddleftpd
 Name:		muddleftpd-authlibmysql
 Version:	0.1
 Release:	3.1
